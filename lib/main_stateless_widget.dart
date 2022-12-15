@@ -1,30 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _MyAppState();
-  }
-}
-
-class _MyAppState extends State<MyApp> {
-  //  named functions
-  void answerQuestions() {
-    print('Answering questions!');
-  }
-
-  var _currentIndex = 0;
-  void _displayNextQuestion() {
-    setState(() {
-      _currentIndex = _currentIndex + 1;
-    });
-    print(_currentIndex);
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var questions = [
@@ -34,22 +16,33 @@ class _MyAppState extends State<MyApp> {
 
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.black87,
-      backgroundColor: Color.fromARGB(255, 56, 228, 176),
-      minimumSize: const Size(88, 36),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      primary: Color.fromARGB(255, 56, 228, 176),
+      minimumSize: Size(88, 36),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
     );
     final ButtonStyle raisedButtonStyle2 = ElevatedButton.styleFrom(
       onPrimary: Colors.black87,
-      backgroundColor: Color.fromARGB(255, 228, 82, 56),
-      minimumSize: const Size(88, 36),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      primary: Color.fromARGB(255, 228, 82, 56),
+      minimumSize: Size(88, 36),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
     );
+//  named functions
+    void answerQuestions() {
+      print('Answering questions!');
+    }
+
+    var currentIndex = 0;
+    void displayNextQuestion() {
+      currentIndex = currentIndex + 1;
+
+      print(currentIndex);
+    }
 
     return MaterialApp(
       home: Scaffold(
@@ -57,39 +50,39 @@ class _MyAppState extends State<MyApp> {
           title: const Text('My First App'),
         ),
         body: Column(children: [
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             children: [
-              Text(questions[_currentIndex]),
-              const SizedBox(width: 10),
+              Text(questions.elementAt(currentIndex)),
+              SizedBox(width: 10),
               ElevatedButton(
                 // Anonymous function
-                onPressed: _displayNextQuestion,
-                style: raisedButtonStyle2,
+                onPressed: displayNextQuestion,
                 child: Text('Next Question'),
+                style: raisedButtonStyle2,
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             // Anonymous function
             onPressed: () {
               print('Answering questions 222!');
             },
-            style: raisedButtonStyle,
             child: Text('Answer 1'),
+            style: raisedButtonStyle,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: answerQuestions,
-            style: raisedButtonStyle,
             child: Text('Answer 2'),
+            style: raisedButtonStyle,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: answerQuestions,
-            style: raisedButtonStyle,
             child: Text('Answer 3'),
+            style: raisedButtonStyle,
           ),
         ]),
       ),
