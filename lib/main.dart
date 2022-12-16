@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/question.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,37 +15,56 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   //  named functions
-  void answerQuestions() {
-    print('Answering questions!');
-  }
+  String? selectedAnswer;
 
+  static const _questions = [
+    {
+      'questionText': 'What\'s your favorite colour?',
+      'answers': [
+        {'text': 'Red', 'score': 10},
+        {'text': 'Blue', 'score': 9},
+        {'text': 'Green', 'score': 8},
+        {'text': 'White', 'score': 1}
+      ],
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': [
+        {'text': 'Elephant', 'score': 1},
+        {'text': 'Rabbit', 'score': 5},
+        {'text': 'Tiger', 'score': 3},
+        {'text': 'Peocock', 'score': 2},
+      ],
+    },
+  ];
   var _currentIndex = 0;
-  void _displayNextQuestion() {
+  var _totalScore = 0;
+  void _answer_questions(int score) {
+    _totalScore += score;
+
     setState(() {
       _currentIndex = _currentIndex + 1;
     });
     print(_currentIndex);
+    if (_currentIndex < _questions.length) {
+      print('We have more _questions!');
+    }
+
+    print("Total score" + _totalScore.toString());
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _currentIndex = 0;
+      _totalScore = 0;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'What\'s your favorite colour?',
-      'What\'s your favorite animal?'
-    ];
-
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.black87,
       backgroundColor: Color.fromARGB(255, 56, 228, 176),
-      minimumSize: const Size(88, 36),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-      ),
-    );
-    final ButtonStyle raisedButtonStyle2 = ElevatedButton.styleFrom(
-      onPrimary: Colors.black87,
-      backgroundColor: Color.fromARGB(255, 228, 82, 56),
       minimumSize: const Size(88, 36),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
@@ -57,38 +77,12 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('My First App'),
         ),
-        body: Column(children: [
-          const SizedBox(height: 20),
-          Question(questions[_currentIndex]),
-          const SizedBox(width: 20),
-          ElevatedButton(
-            // Anonymous function
-            onPressed: _displayNextQuestion,
-            style: raisedButtonStyle2,
-            child: Text('Next Question'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            // Anonymous function
-            onPressed: () {
-              print('Answering questions 222!');
-            },
-            style: raisedButtonStyle,
-            child: Text('Answer 1'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: answerQuestions,
-            style: raisedButtonStyle,
-            child: Text('Answer 2'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: answerQuestions,
-            style: raisedButtonStyle,
-            child: Text('Answer 3'),
-          ),
-        ]),
+        body: _currentIndex < _questions.length
+            ? Quiz(
+                answerQuestions: _answer_questions,
+                questions: _questions,
+                questionIndex: _currentIndex)
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
